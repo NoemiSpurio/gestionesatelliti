@@ -2,6 +2,7 @@ package it.prova.gestionesatelliti.web.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -56,7 +57,6 @@ public class SatelliteController {
 		if (result.hasErrors())
 			return "satellite/insert";
 
-		
 		// validazione input
 		if (satellite.getDataLancio() == null && satellite.getDataRientro() != null) {
 			result.rejectValue("dataLancio", "satellite.error.dataLancio.invalid");
@@ -106,7 +106,8 @@ public class SatelliteController {
 
 		if (satelliteInstance.getStato().equals(StatoSatellite.FISSO)
 				|| satelliteInstance.getStato().equals(StatoSatellite.IN_MOVIMENTO)) {
-			redirectAttrs.addFlashAttribute("errorMessage", "Non puoi cancellare un satellite che non sia disattivato!!!");
+			redirectAttrs.addFlashAttribute("errorMessage",
+					"Non puoi cancellare un satellite che non sia disattivato!!!");
 			return "redirect:/";
 		}
 
@@ -133,7 +134,7 @@ public class SatelliteController {
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente!");
 		return "redirect:/";
 	}
-	
+
 	@GetMapping("/lanciatiDaPiuDiDueAnni")
 	public ModelAndView lanciatiDaPiuDiDueAnni() {
 		ModelAndView mv = new ModelAndView();
@@ -142,7 +143,7 @@ public class SatelliteController {
 		mv.setViewName("satellite/list");
 		return mv;
 	}
-	
+
 	@GetMapping("/disattivatiMaNonRientrati")
 	public ModelAndView disattivatiMaNonRientrati() {
 		ModelAndView mv = new ModelAndView();
@@ -151,13 +152,59 @@ public class SatelliteController {
 		mv.setViewName("satellite/list");
 		return mv;
 	}
-	
+
 	@GetMapping("/inOrbitaDaPiuDi10Anni")
 	public ModelAndView inOrbitButFixed() {
 		ModelAndView mv = new ModelAndView();
 		List<Satellite> results = satelliteService.listAllInOrbitaDaPiuDi10Anni();
 		mv.addObject("satellite_list_attribute", results);
 		mv.setViewName("satellite/list");
+		return mv;
+	}
+
+	@GetMapping("/disabilitaTutto")
+	public ModelAndView disabilitaTutto() {
+		ModelAndView mv = new ModelAndView();
+		List<Satellite> elementiDaModificare = satelliteService.listAllElements();
+		Integer totElementi = elementiDaModificare.size();
+
+		elementiDaModificare = elementiDaModificare.stream().filter(
+				s -> (s.getStato().equals(StatoSatellite.FISSO) || s.getStato().equals(StatoSatellite.IN_MOVIMENTO))
+						&& (s.getDataRientro() == null || s.getDataRientro().after(new Date())))
+				.collect(Collectors.toList());
+
+		Integer totElementiDaModificare = elementiDaModificare.size();
+
+		mv.addObject("satellite_list_attribute", elementiDaModificare);
+		mv.addObject("satellite_countall_attribute", totElementi);
+		mv.addObject("satellite_countdisable_attribute", totElementiDaModificare);
+		mv.setViewName("satellite/disable");
+		return mv;
+	}
+	
+	@PostMapping("/disabilita")
+	public ModelAndView disablita() {
+		ModelAndView mv = new ModelAndView();
+		
+		List<Satellite> elementiDaModificare = satelliteService.listAllElements();
+		Integer totElementi = elementiDaModificare.size();
+				
+		elementiDaModificare = elementiDaModificare.stream().filter(
+				s -> (s.getStato().equals(StatoSatellite.FISSO) || s.getStato().equals(StatoSatellite.IN_MOVIMENTO))
+						&& (s.getDataRientro() == null || s.getDataRientro().after(new Date())))
+				.collect(Collectors.toList());
+		
+		for (Satellite satellite : elementiDaModificare) {
+			satellite.setDataRientro(new Date());
+			satellite.setStato(StatoSatellite.DISATTIVATO);
+			satelliteService.aggiorna(satellite);
+		}
+			
+		mv.addObject("satellite_list_attribute", null);
+		mv.addObject("satellite_countall_attribute", totElementi);
+		mv.addObject("satellite_countdisable_attribute", 0);
+		mv.addObject("successMessage", "Procedura di emergenza eseguita correttamente.");
+		mv.setViewName("satellite/disable");
 		return mv;
 	}
 
