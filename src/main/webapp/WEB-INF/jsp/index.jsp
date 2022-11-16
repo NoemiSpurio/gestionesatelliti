@@ -67,7 +67,7 @@
 			        </div>
 			        <h2>Ricerca 2</h2>
 			        <p>Elenco satelliti disattivati ma non ancora rientrati</p>
-			        <a href="#" class="icon-link">
+			        <a href="${pageContext.request.contextPath}/satellite/disattivatiMaNonRientrati" class="icon-link">
 			          Vai alla funzionalità
 			          <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
 			        </a>

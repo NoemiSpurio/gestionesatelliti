@@ -142,5 +142,14 @@ public class SatelliteController {
 		mv.setViewName("satellite/list");
 		return mv;
 	}
+	
+	@GetMapping("/disattivatiMaNonRientrati")
+	public ModelAndView disattivatiMaNonRientrati() {
+		ModelAndView mv = new ModelAndView();
+		List<Satellite> results = satelliteService.listAllDisattivatiMaNonRientrati();
+		mv.addObject("satellite_list_attribute", results);
+		mv.setViewName("satellite/list");
+		return mv;
+	}
 
 }

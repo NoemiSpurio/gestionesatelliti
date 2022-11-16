@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.prova.gestionesatelliti.model.Satellite;
+import it.prova.gestionesatelliti.model.StatoSatellite;
 import it.prova.gestionesatelliti.repository.SatelliteRepository;
 
 @Service
@@ -61,8 +62,8 @@ public class SatelliteServiceImpl implements SatelliteService {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (StringUtils.isNotEmpty(example.getDenominazione())) {
-				predicates
-						.add(cb.like(cb.upper(root.get("denominazione")), "%" + example.getDenominazione().toUpperCase() + "%"));
+				predicates.add(cb.like(cb.upper(root.get("denominazione")),
+						"%" + example.getDenominazione().toUpperCase() + "%"));
 			}
 			if (StringUtils.isNotEmpty(example.getCodice())) {
 				predicates.add(cb.like(cb.upper(root.get("codice")), "%" + example.getCodice().toUpperCase() + "%"));
@@ -88,6 +89,12 @@ public class SatelliteServiceImpl implements SatelliteService {
 		LocalDate dataInput = LocalDate.now().minusYears(2);
 		Date dataInputParsed = Date.from(dataInput.atStartOfDay(ZoneId.systemDefault()).toInstant());
 		return repository.findByDataLancioBefore(dataInputParsed);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Satellite> listAllDisattivatiMaNonRientrati() {
+		return repository.findByStatoAndDataRientro(StatoSatellite.DISATTIVATO, null);
 	}
 
 }
