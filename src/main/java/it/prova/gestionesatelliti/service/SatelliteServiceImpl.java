@@ -59,10 +59,10 @@ public class SatelliteServiceImpl implements SatelliteService {
 
 			if (StringUtils.isNotEmpty(example.getDenominazione())) {
 				predicates
-						.add(cb.like(cb.upper(root.get("nome")), "%" + example.getDenominazione().toUpperCase() + "%"));
+						.add(cb.like(cb.upper(root.get("denominazione")), "%" + example.getDenominazione().toUpperCase() + "%"));
 			}
 			if (StringUtils.isNotEmpty(example.getCodice())) {
-				predicates.add(cb.like(cb.upper(root.get("cognome")), "%" + example.getCodice().toUpperCase() + "%"));
+				predicates.add(cb.like(cb.upper(root.get("codice")), "%" + example.getCodice().toUpperCase() + "%"));
 			}
 			if (example.getDataLancio() != null) {
 				predicates.add(cb.greaterThanOrEqualTo(root.get("dataLancio"), example.getDataLancio()));
