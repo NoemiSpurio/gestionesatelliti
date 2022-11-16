@@ -78,7 +78,7 @@
 			        </div>
 			        <h2>Ricerca 3</h2>
 			        <p>Elenco satelliti rimasti in orbita 10 anni e che ora sono fissi</p>
-			        <a href="#" class="icon-link">
+			        <a href="${pageContext.request.contextPath}/satellite/inOrbitaDaPiuDi10Anni" class="icon-link">
 			          Vai alla funzionalità
 			          <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
 			        </a>

@@ -151,5 +151,14 @@ public class SatelliteController {
 		mv.setViewName("satellite/list");
 		return mv;
 	}
+	
+	@GetMapping("/inOrbitaDaPiuDi10Anni")
+	public ModelAndView inOrbitButFixed() {
+		ModelAndView mv = new ModelAndView();
+		List<Satellite> results = satelliteService.listAllInOrbitaDaPiuDi10Anni();
+		mv.addObject("satellite_list_attribute", results);
+		mv.setViewName("satellite/list");
+		return mv;
+	}
 
 }

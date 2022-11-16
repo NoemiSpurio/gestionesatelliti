@@ -97,4 +97,12 @@ public class SatelliteServiceImpl implements SatelliteService {
 		return repository.findByStatoAndDataRientro(StatoSatellite.DISATTIVATO, null);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<Satellite> listAllInOrbitaDaPiuDi10Anni() {
+		LocalDate dataInput = LocalDate.now().minusYears(10);
+		Date dataInputParsed = Date.from(dataInput.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		return repository.findByStatoAndDataLancioBefore(StatoSatellite.FISSO,dataInputParsed);
+	}
+
 }

@@ -21,4 +21,6 @@ public interface SatelliteService {
 	public List<Satellite> listAllLanciatiDaPiuDiDueAnni();
 	
 	public List<Satellite> listAllDisattivatiMaNonRientrati();
+	
+	public List<Satellite> listAllInOrbitaDaPiuDi10Anni();
 }
