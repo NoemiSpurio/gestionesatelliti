@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.prova.gestionesatelliti.model.Satellite;
@@ -131,6 +132,15 @@ public class SatelliteController {
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente!");
 		return "redirect:/";
+	}
+	
+	@GetMapping("/lanciatiDaPiuDiDueAnni")
+	public ModelAndView lanciatiDaPiuDiDueAnni() {
+		ModelAndView mv = new ModelAndView();
+		List<Satellite> results = satelliteService.listAllLanciatiDaPiuDiDueAnni();
+		mv.addObject("satellite_list_attribute", results);
+		mv.setViewName("satellite/list");
+		return mv;
 	}
 
 }

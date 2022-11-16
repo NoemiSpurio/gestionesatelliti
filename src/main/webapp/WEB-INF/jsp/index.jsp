@@ -56,7 +56,7 @@
 			        </div>
 			        <h2>Ricerca 1</h2>
 			        <p>Elenco satelliti lanciati da più di due anni</p>
-			        <a href="#" class="icon-link">
+			        <a href="${pageContext.request.contextPath}/satellite/lanciatiDaPiuDiDueAnni" class="icon-link">
 			          Vai alla funzionalità
 			          <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
 			        </a>

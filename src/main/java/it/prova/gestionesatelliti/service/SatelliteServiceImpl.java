@@ -1,6 +1,9 @@
 package it.prova.gestionesatelliti.service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.Predicate;
@@ -77,6 +80,14 @@ public class SatelliteServiceImpl implements SatelliteService {
 		};
 
 		return repository.findAll(specificationCriteria);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Satellite> listAllLanciatiDaPiuDiDueAnni() {
+		LocalDate dataInput = LocalDate.now().minusYears(2);
+		Date dataInputParsed = Date.from(dataInput.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		return repository.findByDataLancioBefore(dataInputParsed);
 	}
 
 }
